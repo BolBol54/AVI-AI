@@ -1,8 +1,6 @@
 from django.contrib import admin
 from django.urls import path
 from interviewers import views
-
-from .views import Report
 from iommi import Table
 from .models import Job , Applicants
 
@@ -28,11 +26,12 @@ urlpatterns = [
 
     #INTERVIWEE PART
     path('startinterview/<int:applicant_id>', views.onlineInterview, name="interviewee_interview"),
-    path('upload', views.upload, name="videoUpload"),
-    # path("record",views.record,name="recordvideo")
+    path('view/', views.dynamic_stream, name="videostream"),
+    path('upload', views.upload, name="video"),
+    path("record",views.record,name="recordvideo")
     # path(r'^/(?P<stream_path>(.*?))/$',views.dynamic_stream,name="videostream"),
     # path(r'^stream/$',views.indexscreen),
-    path("test",Report.as_view(),name="report")
+
 
     # path('job/edit', views.jobEdit, name="edit_job")
     # path('boards/<int:board_id>/topics/<int:topic_id>/posts/<int:post_id>/edit', views.editPost.as_view(),

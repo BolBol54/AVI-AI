@@ -23,8 +23,8 @@ import base64
 import threading
 
 import threading
-
-
+def record(request):
+    return  render(request,"video.html")
 # Create your views here.
 
 def home(request):
@@ -235,9 +235,14 @@ def onlineInterview(request,applicant_id):
             return render(request, "applicant/questions.html",{"question":questions[0],'interview':interview,})
         if "next" in request.POST:
             # print(request.POST)
-            link = request.POST['answerVideo']
+            link = request.POST['answer']
             print(link)
-                # name = link.split("/")[3]
+            # name = link.split("/")[3]
+            # ApplicantQues.objects.create(
+            #     applicant= Applicant,
+            #     question= questions[0],
+            #     videoAns= request.POST['answerVideo']
+            # )
                 # na = str(questions[0].id) + str()
                 # # cv2.VideoWriter("/static/video/filename.mp4", name, 20, (320, 180))
                 #
@@ -251,7 +256,7 @@ def onlineInterview(request,applicant_id):
             last = ""
             if len(questions) == 1:
                 last = "last"
-            return render(request, "applicant/questions.html",{"question":questions[0],'interview':interview,
+            return render(request, "applicant/questions.html",{"applicant": applicant_id,"question":questions[0],'interview':interview,
                                                              "last":last})
         if "end" in request.POST:
             print("end")
@@ -263,10 +268,15 @@ def onlineInterview(request,applicant_id):
 
 @csrf_exempt
 def upload(request):
-    print(request.POST['video-filename'])
-    link =request.POST.get('video-filename',False)
-    return render(request,"video.html",{"link":link})
-
+    # if request.method == "POST":
+    print(request.POST.get("file"))
+    HttpResponse("HELLO")
+    return  HttpResponse("HELLO")
+    # src = request.POST.get('video-blob')
+    #     filname =request.POST.get('video-filename')
+    #
+    #     ApplicantQues.objects.create(
+    #     )
 
 
 

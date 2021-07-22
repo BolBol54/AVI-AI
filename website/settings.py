@@ -42,14 +42,6 @@ INSTALLED_APPS = [
     "widget_tweaks",
     'crispy_forms',
     'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.linkedin',
-    'iommi',
-    'django_tables2',
-    'crudbuilder',
     "rest_framework"
 
 
@@ -64,7 +56,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'iommi.middleware',
 
 ]
 
@@ -92,7 +83,6 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 
     # `allauth` specific authentication methods, such as login by e-mail
-    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 

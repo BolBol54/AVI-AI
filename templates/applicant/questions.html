@@ -22,6 +22,13 @@
                 {% csrf_token %}
 {#            <img  style="background-color: black" id="img" src="{% static "img/black.jpg" %}" width="500">#}
             <video controls autoplay playsinline  style="width: 100%" id="video"></video>
+                      <input type="hidden"name="answerVideo" id="ans">
+
+{#             <input type="hidden"name="applicant" id="app" value="{{ applicant }}">#}
+{#             <input type="hidden"name="question" id="ques" value="{{ question.id }}">#}
+
+
+
          <div id="result">
 
          </div>
@@ -30,11 +37,13 @@
             <div class="d-inline-block">
                 <button class="btn btn-primary" id="play">Play</button>
                 <button class="btn btn-danger" id="pause">Pause</button>
+
             </div>
 
                 {% if last == "last" %}
                 <button class="btn btn-info" style="float:right;" type="submit" id name="end">Submit your application</button>
                 {% else %}
+
                 <button class="btn btn-info" style="float:right;" type="submit" id name="next">Next Question</button>
                 {% endif %}
             </form>
@@ -42,8 +51,8 @@
     {% block javascript %}
         <script>
 
-
    var video = document.querySelector('video');
+var download_link = document.querySelector("#download-video");
 
 function captureCamera(callback) {
     navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function(camera) {
@@ -53,33 +62,22 @@ function captureCamera(callback) {
         console.error(error);
     });
 }
- {#var timeLeft = {{question.questDur }};#}
- {#       console.log(timeLeft)#}
- {#       var elem = document.getElementById('some_div');#}
- {#       var timerId = setInterval(countdown, 1000);#}
- {##}
- {#   function countdown() {#}
- {#       if (timeLeft == -1) {#}
- {#           clearTimeout(timerId);#}
- {#           doSomething();#}
- {#       } else {#}
- {#           elem.innerHTML = timeLeft + ' seconds remaining';#}
- {#           timeLeft--;#}
- {#       }#}
- {#   }#}
+
+
 function stopRecordingCallback() {
     video.src = video.srcObject = null;
     video.muted = false;
     video.volume = 1;
     video.src = URL.createObjectURL(recorder.getBlob());
 
+
     recorder.camera.stop();
     recorder.destroy();
     recorder = null;
 
-}
 
-var recorder; // globally accessible
+}
+var recorder = null; // globally accessible
 
 document.getElementById('play').onclick = function() {
     this.disabled = true;
@@ -101,133 +99,27 @@ document.getElementById('play').onclick = function() {
     });
 };
 
-document.getElementById('pause').onclick = function() {
-    this.disabled = true;
 
-    var mediaSource = new MediaSource;
-    const url = URL.createObjectURL(mediaSource);
-    video.src = url;
+
+document.getElementById('pause').onclick = function() {
+
+    this.disabled = true;
+    document.getElementById("ans").value = video.src
+
+    {#var mediaSource = new MediaSource;#}
+    {#const url = URL.createObjectURL(mediaSource);#}
+    {#video.src = url;#}
+    {#recordedBlob = recorder.blob; // blob property#}
+    {##}
+    {#    recorderBlob = recorder.getBlob(); // getBlob method#}
+    {#    console.log(mediaSource)#}
+
+    download_link.href = recorder.getBlob();
+    window.download_link
+
     recorder.stopRecording(stopRecordingCallback);
 
- var blob = recorder.getBlob();
- var fileName = new Date().getTime() + ".webm";
- var fileObject = new File([blob], fileName, {
-            type: 'video/webm'
-        });
-    var formData = new FormData();
-    formData.append('video-blob', fileObject);
-    // file name
-    formData.append('video-filename', fileObject.name);
-
-    formData.append( "_token", $('meta[name="csrf-token"]').attr('content'));
-
-        // upload using jQuery
-        $.ajax({
-            url: "/upload",
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            type: 'POST',
-            success: function(response) {
-                if (response === 'success') {
-
-                    // file path on server
-                    var fileDownloadURL = 'uploads/' + fileObject.name;
-                    // preview uploaded file in a VIDEO element
-                    document.getElementById('video').src = fileDownloadURL;
-                    // preview the uploaded file URL
-                    document.getElementById('result').append('<a href="' + fileDownloadURL + '" target="_blank">' + fileDownloadURL + '</a>');
-
-
-
-                    // open uploaded file in a new tab
-                    window.open(fileDownloadURL);
-                } else {
-                   // alert(response); // error/failure
-                }
-            }
-        });
-
-{#var formData = new FormData();#}
-{#var blob = new Blob([url], {type : 'video/webm'}); // the blob#}
-{#    console.log(blob)#}
-{#formData.append(fileType + '-filename', fileName);#}
-{#formData.append(fileType + '-blob', video);#}
-{#var xhr=new XMLHttpRequest();#}
-{#xhr.open("POST","/upload");#}
-{#xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'));#}
-{#xhr.send(formData);#}
-
-    {#function xhr(url, data, callback) {#}
-    {#    var request = new XMLHttpRequest();#}
-    {#    request.onreadystatechange = function () {#}
-    {#        if (request.readyState == 4 && request.status == 200) {#}
-    {#            callback(location.href + request.responseText);#}
-    {#        }#}
-    {#    };#}
-    {#    request.open('POST', "/upload");#}
-    {#    request.send(data);#}
-    {# var preview = document.createElement('video');#}
-    {# var div = document.getElementById('result');#}
-    {# preview.controls = true;#}
-    {# preview.src = url;#}
-    {# div.appendChild(preview);#}
-    {# var filename = new Date().getTime() + ".webm";#}
-    {# var xhr=new XMLHttpRequest();#}
-    {# xhr.onload=function(e) {#}
-    {#   if(this.readyState === 4) {#}
-    {#       console.log("Server returned: ",e.target.responseText);#}
-    {#   }#}
-    {# };#}
-    {# var input = document.createElement("input");#}
-    {#input.setAttribute("type", "hidden");#}
-    {#input.setAttribute("name", "answerVideo");#}
-    {#input.setAttribute("value", video.src);#}
-    {#div.appendChild(input)#}
-
-      {#var fd=new FormData();#}
-      {#           fd.append("video",video,filename);#}
-      {#           xhr.open("POST","/upload");#}
-      {#           xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'));#}
-      {#           xhr.send(fd);#}
-
-
-     {#  ################################################## #}
-
-console.log("done")
-{##}
-{#document.getElementById("n").value =video.src#}
-{##}
-{##}
-{##}
-{##}
-    {#var formData =  JSON.parse(JSON.stringify($('#myForm').serializeArray()));#}
-    {#  var data = {#}
-    {#    data: formData,#}
-    {#    qHeadId : id,#}
-    {#    typeId : typeId,#}
-    {#  };#}
-    {#  $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token }}' } });#}
-    {#  jQuery.ajax({#}
-    {#      url: "/saveVideo",#}
-    {#      method: 'POST',#}
-    {#      data: {#}
-    {#          "_token": "{{ csrf_token }}",#}
-    {#          data,#}
-    {#      },#}
-    {#      error: function (error) {#}
-    {#          console.log(error.responseJSON);#}
-    {#      },#}
-    {#      success: function (result) {#}
-    {#      }#}
-    {#  })#}
-{##}
-};
-
-
-
+}
 
         </script>
         <script src="{% static "js/RecordRTC.js" %}"></script>
