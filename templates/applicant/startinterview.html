@@ -1,0 +1,136 @@
+{% extends "master.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{{% block stylesheet %}
+    <style>
+    body{
+        background-color: whitesmoke;
+        margin-left: 15%;
+        margin-top: 5px;
+    }
+
+    #question input{
+        box-shadow: none;
+    }
+
+    .container p{
+        font-size: 20px;
+    }
+      .navbar{
+          background-color: white;
+          height: 5px;
+    }
+    .navbar ul li a{
+        color: black;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .topnav {
+    background-color: whitesmoke;
+    overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+/* Right-aligned section inside the top navigation */
+.topnav-right {
+  float: right;
+}
+    #video{
+        visibility: visible !important;
+    }
+    </style>
+{% endblock %}
+{% block title %} {{ interview.title }} {% endblock %}
+
+    {% block content %}
+        {% include "sidebar.html" %}
+
+       <div class="topnav">
+  <a class="active" href="#home">{{ interview.title }}</a>
+  <div class="topnav-right">
+    <a href="#search">Home</a>
+    <a href="#about">Interviews</a>
+  </div>
+</div>
+<div class="container" style="background-color: white">
+{% block questionName %} {% endblock %}
+    <h3>Instructions</h3>
+    <div class=" row">
+    {% block section %}
+        <div class="container col-md-6" style="font-size: 20px">
+            <ul>
+
+                <li>PICK THE PERFECT SPOT FOR LIGHTING</li>
+                <li>REMOVE DISTRACTIONS</li>
+                <li>LOG ON EARLY AND TEST YOUR CAMERA AND MIC</li>
+                <li>LOOK DIRECTLY INTO THE CAMERA</li>
+                <li>SPEAK WITH LOAD VOICE</li>
+                <li>WRITE DOWN NOTES IF NEEDED</li>
+            </ul>
+        </div>
+
+        <div class="col col-md-6" id="video">
+            <img  style="background-color: black" id="img" src="{% static "img/black.jpg" %}" width="500">
+            <div class="d-inline-block">
+                <a class="btn btn-primary" id="play">Play</a>
+                <a class="btn btn-danger" id="pause">Pause</a>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <button class="btn btn-info" style="float:right;" type="submit" name="start">Start Interview</button>
+            </form>
+        </div>
+                                {% endblock %}
+s
+</div>
+        </div>
+        {% block javascript %}
+<script>
+var playbutton = document.getElementById("play");
+var pausebutton = document.getElementById("pause");
+
+playbutton.addEventListener("click", play);
+pausebutton.addEventListener("click", pause);
+image = document.getElementById('img');
+{#myVideo = document.getElementById("myvid");#}
+function play() {
+    image.src = {% url 'videostream' stream_path='video' %} ;
+}
+function pause() {
+    image.src = "{% static "img/black.jpg" %}" ;
+}
+                // create an AJAX call
+
+{#    if (myVideo.paused) {#}
+{#        myVideo.play();#}
+{#        ppbutton.innerHTML = "Pause";#}
+{#        }#}
+{#    else  {#}
+{#        myVideo.pause();#}
+{#        ppbutton.innerHTML = "Play";#}
+{#        }#}
+</script>
+{% endblock %}
+
+{% endblock %}
+

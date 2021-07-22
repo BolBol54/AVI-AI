@@ -1,0 +1,50 @@
+{% extends "master.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block stylesheet %}
+    <style>
+   .container{
+       margin-top: 10%;
+       margin-left: 20%;
+   }
+    .table{
+        width: 80%;
+    }
+    </style>
+{% endblock %}
+{% block title %} Jobs {% endblock %}
+
+    {% block content %}
+{% include "sidebar.html" %}
+        <div class="container">
+                   <a class="btn btn-info justify-content-end"
+                   href="{% url "add_job" %}">Add New Job</a></div>
+        <table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Title</th>
+      <th scope="col">Description</th>
+      <th scope="col">Created By</th>
+      <th scope="col">Delete</th>
+
+    </tr>
+  </thead>
+  <tbody>
+  {% for job in jobs %}
+    <tr>
+      <th scope="row">{{ forloop.counter }} </th>
+      <td>{{ job.name }}</td>
+      <td>{{ job.description }}</td>
+      <td>{{ job.created_by }}</td>
+      <td>
+          <a href="{% url "delete_job" job.id %}"><img width="20" height="20" src="{% static "img/remove.svg" %}"></a></td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+        </div>
+{% endblock %}

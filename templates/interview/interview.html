@@ -1,0 +1,218 @@
+{% extends "master.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} {{ interview.title  }} {% endblock %}
+{% block stylesheet %}
+    <style>
+    body{
+        background-color: #f5f5f5;
+        margin-left: 15%;
+    }
+    .interview{
+        margin-top: 6%;
+    }
+
+    #question input{
+        box-shadow: none;
+    }
+
+    .container p{
+        font-size: 20px;
+    }
+      .navbar{
+          background-color: white;
+          height: 5px;
+    }
+    .navbar ul li a{
+        color: black;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .col{
+        padding:5px ;
+        margin: 5px;
+        width: 15rem;
+        background-color: white;
+        height: 6rem;
+    }
+    </style>
+    <link rel="stylesheet" href="{% static 'css/addInterview1.css' %}">
+{% endblock %}
+
+    {% block content %}
+{% include "sidebar.html" %}
+        <br>
+
+        <div class="container interview">
+            <p style="font-size: 30px;font-weight: bold">{{ interview.title }}</p>
+            <div class="row">
+                <div class="col d-sm-flex" >
+                    <div class=" p-2"style="background-color: #33cccc;border-radius: 5px;">
+                        <img src="{% static "img/group.png" %}" style="width: 3rem;height: 4rem"/>
+                    </div>
+                    <div class="p-2 justify-content-center">
+                        <p>All Invitations</p>
+                        <p>5</p>
+                    </div>
+                </div>
+                <div class="col d-sm-flex" >
+                    <div class=" p-2" style="background-color:#cc0000;border-radius: 5px;">
+                        <img src="{% static "img/waiting.png" %}" style="width: 3rem;height: 4rem"/>
+                    </div>
+                    <div class="p-2 justify-content-center">
+                        <p>Waiting</p>
+                        <p>5</p>
+                    </div>
+                </div>
+                <div class="col d-sm-flex" >
+                    <div class=" p-2"  style="background-color:#ffff33;border-radius: 5px;">
+                        <img src="{% static "img/progress.png" %}" style="width: 3rem;height: 4rem"/>
+                    </div>
+                    <div class="p-2 justify-content-center">
+                        <p>In Progress</p>
+                        <p>5</p>
+                    </div>
+                </div>
+                <div class="col d-sm-flex" >
+                    <div class=" p-2" style="background-color:#2eb82e;border-radius: 5px;">
+                        <img src="{% static "img/interviewed.png" %}" style="width: 3rem;height: 4rem"/>
+                    </div>
+                    <div class="p-2 justify-content-center">
+                        <p>Interviewed</p>
+                        <p>5</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container row">
+        <div class="d-block col col-md-3" style="background-color: white;margin-top: 20px;height: 100%">
+                <button class="btn btn-primary"style="background-color: blue;color: white;width: 100%" type="button" data-toggle="collapse" data-target="#description" aria-expanded="false" aria-controls="description">
+                    {{ interview.title}}
+                </button>
+                <div class="collapse py-2" id="description">
+                    <div class=" my-2">
+                        <h4>Description</h4>
+                        <p>{{ interview.description }}</p>
+                        <h4>Employee Skills</h4>
+
+{#                        array of questions skills and include them in string#}
+                    <ul>
+                        {% for q in questions %}
+                            {% for skill in q.skills %}
+                            <li class="bold" style="font-size: 20px"> {{  skill}}</li>
+                                  {% endfor %}
+                                  {% endfor %}
+                    </ul>
+                        </div>
+                </div>
+            </div>
+
+        <div class="d-block col col-md-8 mx-2" style="background-color: white;margin-top: 20px;height: 100%">
+           <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+               <li class="nav-item" role="presentation">
+                   <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-questions" role="tab" aria-controls="pills-questions" aria-selected="true">Questions List</a>
+               </li>
+               <li class="nav-item" role="presentation">
+                   <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-sendInvitation" role="tab" aria-controls="pills-sendInvitation" aria-selected="false">Send Invitation</a>
+               </li>
+               <li class="nav-item" role="presentation">
+                   <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-invitations" role="tab" aria-controls="pills-invitation" aria-selected="false">Invitation List</a>
+               </li>
+           </ul>
+            <div class="tab-content" id="pills-tabContent">
+{#                tab questions#}
+                <div class="tab-pane fade show active" id="pills-questions" role="tabpanel" aria-labelledby="pills-questions-tab">
+                    <div class="container">
+                        <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                            <div class="row"><div class="col-sm-12 col-md-4">
+                                <div class="dataTables_length" id="dataTable_length">
+                                    <label>Show <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div>
+                                <div class="col-sm-12 col-md-4"><div id="dataTable_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable"></label></div></div>
+                                <div class="col-sm-12 col-md-4"><a href="{% url "addInterQues" interview.id %}" class="btn btn-primary">Add Question</a></div>
+
+                            </div>
+                            <div class="row"><div class="col-sm-12">
+                                <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+                            <thead>
+                            <tr role="row">
+                                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending"style="width: 35%;">Question</th>
+                                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending"style="width: 5%">Question Duration</th>
+                                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 25%;">Skill(s)</th>
+                                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" ></th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for question in questions %}
+                            <tr role="row" class="odd">
+                               <td class="sorting_1">{{ question.question }}</td>
+                               <td>{{ question.questDur }}</td>
+                              <td>
+                                  {% for skill in question.skills %}
+                                      <span class="text-white"
+                                            style="background-color:#14a635;margin-left:2px;font-weight:bold;border-radius: 5px;padding: 2px">{{  skill}}</span>
+                                  {% endfor %}
+                              </td>
+                               <td><div>
+                                   <a class="btn btn-primary">Edit</a>
+                                   <a href="{% url "delete_question" interview.id question.id%}" class="btn btn-danger">Delete</a>
+                               </div></td>
+                             </tr>
+                            {% endfor %}
+                         </tbody>
+                        </table>
+                        </div>
+                            </div>
+                        </div></div></div>
+                <div style="padding: 5px" class="tab-pane fade" id="pills-sendInvitation" role="tabpanel" aria-labelledby="pills-sendInvitation-tab">
+                    <form method="post" novalidate class="mb-4">
+                        {% csrf_token %}
+                        {{ intervieweeForm|crispy }}
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="pills-invitations" role="tabpanel" aria-labelledby="pills-invitations-tab">
+ <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+                            <thead>
+                            <tr role="row">
+                                <th></th>
+                                <th style="width: 20%;">Name</th>
+                                <th>Email</th>
+                                <th style="width: 10%;">State</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for interviewee in interviewees %}
+                            <tr role="row" class="odd">
+                               <td class=""> {{ forloop.counter }}</td>
+                               <td class="">{{ interviewee.name }}</td>
+                               <td>{{ interviewee.email }}</td>
+                              <td>{{ interviewee.state }}</td>
+                               <td><div>
+                                   <a class="btn btn-primary">Edit</a>
+                                   <a class="btn btn-danger">Delete</a>
+                                   <a class="btn btn-info">View Report</a>
+                               </div></td>
+                             </tr>
+                            {% endfor %}
+                         </tbody>
+                        </table>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
+
+
+    {% block javascript %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+    {% endblock %}
+{% endblock %}
+    </ol>

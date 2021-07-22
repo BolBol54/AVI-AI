@@ -1,0 +1,152 @@
+{% extends "master.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Add Quetions {% endblock %}
+{% block stylesheet %}
+    <style>
+    .con{
+        box-shadow: 0px 0px 5px 5px #cce5ff;
+        padding: 10px
+    }
+    .interview{
+        margin-top: 8%;
+        margin-left: 10%;
+    }
+    #question{
+        border: 2px solid gray;
+        box-shadow: 5px 5px 5px darkslategrey;
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+    #question input{
+        box-shadow: none;
+    }
+
+    .container p{
+        font-size: 20px;
+    }
+    </style>
+    <link rel="stylesheet" href="{% static 'css/addInterview1.css' %}">
+{% endblock %}
+
+    {% block content %}
+{#        {%  include "navbar.html" %}#}
+{% include "sidebar.html" %}
+        <br>
+                <div class="container interview mt-8 w-75 ">
+                    <p><span style="font-size: 30px;font-weight: bold"> Job Title : </span>{{ interview.job.name }}</p>
+                    <p><span style="font-size: 30px;font-weight: bold"> Interview Title : </span>{{ interview.title }}</p>
+                   <hr>
+                                    {% if questions != 0 %}
+
+                    <h3 for="">Questions</h3>
+                    <table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Order</th>
+      <th scope="col">Question</th>
+      <th scope="col">Answer</th>
+      <th scope="col">Duration</th>
+      <th scope="col">Skills</th>
+      <th scope="col">Notes</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for question in questions %}
+    <tr>
+      <th scope="row">{{ forloop.counter }} </th>
+      <td>{{ question.question }}</td>
+      <td>{{ question.answer }}</td>
+      <td>{{ question.questDur }} mins</td>
+      <td>{{ question.skills }} mins</td>
+      <td>{{ question.description }} mins</td>
+      <td>
+          <a href="{% url "delete_question" interview.id question.id %}"><img width="20" height="20" src="{% static "img/remove.svg" %}"></a></td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+                    {% endif %}
+        <form role="form" class="needs-validation" id="question" method="post" novalidate class="mb-4" >
+        {% csrf_token %}
+            <input type="hidden" name="interview_id" value="{{ interview.id }}">
+        {{ questForm|crispy }}
+
+        <div id="result">
+
+        </div>
+
+            <button class=" m-2 btn" type="submit">Save Changes </button>
+
+        </form>
+{#        <button class=" m-2 btn" id="addQuest">Add Question </button>#}
+
+</div>
+
+    {% block javascript %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // catch the form's submit event
+            $('#addQuest').click(function () {
+                $('#question').css('display', 'block');
+                $('#addQuest').css('display', 'none');
+
+
+                // create an AJAX call
+                {#$.ajax({#}
+                {#    data: $(this).serialize(), // get the form data#}
+                {#    url: "{% url 'add_question' %}",#}
+                {#    // on success#}
+                {#    success: function (response) {#}
+                {#        console.log(response);#}
+                {#        $('#question').css('display', 'inline-block');#}
+                {#        $('#result').append(response);#}
+                {##}
+                {#    },#}
+                {##}
+                {#    // on error#}
+                {#    error: function (response) {#}
+                {#        // alert the error if any error occured#}
+                {#        console.log(response.responseJSON.errors)#}
+                {#    }#}
+                {#                });#}
+                {#return false;#}
+            });
+        })
+
+
+    </script>
+    {% endblock javascript %}
+
+    {% endblock %}
+    </ol>
+{#{% for question in questions %}#}
+{#                <div id="question">#}
+{#               {{ question|crispy }}#}
+{#            <div id="question">#}
+{#                <div class="form-group">#}
+{#                    <label for="question">Question*</label>#}
+{#                    <input type="text" class="form-control" id="question" name="question" placeholder="Write the question" maxlength="200" required="true">#}
+{#                </div>#}
+{#                <div class="form-group">#}
+{#                    <label for="question">Answer*</label>#}
+{#                    <input type="text" class="form-control" id="answer" name="answer" placeholder="Write the answer" maxlength="200">#}
+{#                </div>#}
+{#               <div class="form-group">#}
+{#                   <label for="questDur">Question Duration: </label>#}
+{#                   <select  class="form-control" id="questDur" name="questDur" required="true">#}
+{#                       <option selected disabled>Question Duration</option>#}
+{#                       <option value="1">1   min</option>#}
+{#                       <option value="2">2   mins</option>#}
+{#                       <option value="5">5   mins</option>#}
+{#                       <option value="10">10 mins</option>#}
+{#                       <option value="15">15 mins</option>#}
+{#                   </select>#}
+{#               </div>#}
+{#            </div>#}
+{#            {% endfor %}#}

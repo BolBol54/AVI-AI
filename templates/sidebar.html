@@ -1,0 +1,93 @@
+{%  load static %}
+    <link rel="stylesheet" href="{% static 'css/addInterview1.css' %}">
+
+<div class="sidebar">
+    <div class="sidebar-header">
+        <div class="user-pic">
+          <img class="img-responsive img-rounded" src="{% static "img/user.png"%}" alt="User picture">
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ user.username }}
+          </span>
+          <span class="user-role">Interviewer</span>
+          <span class="user-status">
+          </span>
+        </div>
+      </div>
+    <div class="sidebar-content">
+         <ul>
+        <li><a href="{% url "dashboard" %}" class="active">Home</a></li>
+        <li><a href="{% url "interviews" %}">Interviews</a></li>
+        <li><a href="{% url "jobs" %}">Jobs</a></li>
+        </ul>
+    </div>
+    <div class="sidebar-footer">
+        <a href="{% url "logout" %}">Logout</a>
+
+    </div>
+</div>
+
+<style>
+    .sidebar{
+        margin-top: 8px;
+        margin-left: 5px;
+        width: 200px;
+        height: 500px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #39425c;
+        overflow-x: hidden;
+        padding: 10px;
+        box-shadow: 0 9px 15px 0 #333333, 0 8px 18px 0 #333333;
+    }
+    .sidebar-header{
+        border-bottom: #ffffff 1px solid;
+        color: white;
+        display: block;
+        font-size: 19px;
+        padding-left: 10px;
+    }
+    .user-info{
+        display: grid;
+    }
+    .sidebar ul{
+        padding-top: 5px;
+        padding-left: 10px;
+        text-decoration: none;
+
+    }
+    .sidebar ul a , .sidebar-footer a{
+        padding-top: 6px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818182;
+        display: block;
+
+    }
+    .sidebar ul a:hover,.sidebar-footer a:hover {
+        color: white;
+        text-decoration: underline;
+    }
+    .sidebar ul a:active, .sidebar-footer a:active {
+            color: white;
+    }
+    .sidebar img{
+        padding-top: 10px;
+        width: 80px;
+        height: 90px;
+    }
+    .sidebar-footer a{
+        margin-top: 100px;
+        padding-left: 10px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818182;
+        display: block;
+    }
+
+</style>
+<script>
+
+    </script>

@@ -1,0 +1,132 @@
+{% extends "master.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} New Interview {% endblock %}
+{% block stylesheet %}
+    <style>
+    .con{
+        box-shadow: 0px 0px 5px 5px #cce5ff;
+        padding: 10px
+    }
+    .interview-form{
+        margin-top: 8%;
+        margin-left: 15%;
+    }
+    #question{
+        border: 2px solid gray;
+        box-shadow: 5px 5px 5px darkslategrey;
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+    #question input{
+        box-shadow: none;
+    }
+    .interview-form{
+         width: 60%;
+    }
+    </style>
+    <link rel="stylesheet" href="{% static 'css/addInterview1.css' %}">
+{% endblock %}
+
+    {% block content %}
+{#        {%  include "navbar.html" %}#}
+{% include "sidebar.html" %}
+        <br>
+                <div class="container mt-5 w-50 ">
+                    <p class="s-10"> Job Title : <span>{{ interview.job.name }}</span></p>
+                    <h3>Interview Title: </h3><p>{{ interview.title }}</p>
+        <form role="form" class="needs-validation" id="question" method="post" novalidate class="mb-4">
+        {% csrf_token %}
+            <input type="hidden" name="interview_id" value="{{ interview.id }}">
+            <h3 for="">Questions</h3>
+        {{ questForm|crispy }}
+
+        <div id="result">
+
+        </div>
+            <button class=" m-2 btn" id="addQuest">Add Question </button>
+
+            <button class=" m-2 btn" type="submit">Save Changes </button>
+
+        </form>
+</div>
+
+    {% block javascript %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // catch the form's submit event
+            $('#addQuest').click(function () {
+                // create an AJAX call
+                $.ajax({
+                    data: $(this).serialize(), // get the form data
+                    url: "{% url 'add_question' %}",
+                    // on success
+                    success: function (response) {
+                        console.log(response);
+                        $('#result').append(response);
+
+                    },
+
+                    // on error
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response.responseJSON.errors)
+                    }
+                });
+
+                return false;
+            });
+        })
+    (() => {
+  'use strict';
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation');
+
+  // Loop over them and prevent submission
+  Array.prototype.slice.call(forms).forEach((form) => {
+    form.addEventListener('submit', (event) => {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    }, false);
+  });
+})();
+
+
+
+    </script>
+    {% endblock javascript %}
+
+    {% endblock %}
+    </ol>
+{#{% for question in questions %}#}
+{#                <div id="question">#}
+{#               {{ question|crispy }}#}
+{#            <div id="question">#}
+{#                <div class="form-group">#}
+{#                    <label for="question">Question*</label>#}
+{#                    <input type="text" class="form-control" id="question" name="question" placeholder="Write the question" maxlength="200" required="true">#}
+{#                </div>#}
+{#                <div class="form-group">#}
+{#                    <label for="question">Answer*</label>#}
+{#                    <input type="text" class="form-control" id="answer" name="answer" placeholder="Write the answer" maxlength="200">#}
+{#                </div>#}
+{#               <div class="form-group">#}
+{#                   <label for="questDur">Question Duration: </label>#}
+{#                   <select  class="form-control" id="questDur" name="questDur" required="true">#}
+{#                       <option selected disabled>Question Duration</option>#}
+{#                       <option value="1">1   min</option>#}
+{#                       <option value="2">2   mins</option>#}
+{#                       <option value="5">5   mins</option>#}
+{#                       <option value="10">10 mins</option>#}
+{#                       <option value="15">15 mins</option>#}
+{#                   </select>#}
+{#               </div>#}
+{#            </div>#}
+{#            {% endfor %}#}

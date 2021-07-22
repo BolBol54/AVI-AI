@@ -1,0 +1,95 @@
+<html>
+
+<style>
+    html, body {
+        margin: 0!important;
+        padding: 0!important;
+    }
+</style>
+
+<title>Video Recording | RecordRTC</title>
+<h1>Simple Video Recording using RecordRTC</h1>
+
+<br>
+
+<video controls autoplay  src="{{ link }}"></video>
+<hr>
+{#<video controls autoplay playsinline></video>#}
+{##}
+{#<script src="{% static "js/RecordRTC.js" %}"></script>#}
+{#<script>#}
+{#var video = document.querySelector('video');#}
+{##}
+{#function captureCamera(callback) {#}
+{#    navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function(camera) {#}
+{#        callback(camera);#}
+{#    }).catch(function(error) {#}
+{#        alert('Unable to capture your camera. Please check console logs.');#}
+{#        console.error(error);#}
+{#    });#}
+{#}#}
+{##}
+{#function stopRecordingCallback() {#}
+{#    video.src = video.srcObject = null;#}
+{#    video.muted = false;#}
+{#    video.volume = 1;#}
+{#    video.src = URL.createObjectURL(recorder.getBlob());#}
+{##}
+{#    recorder.camera.stop();#}
+{#    recorder.destroy();#}
+{#    recorder = null;#}
+{#}#}
+{##}
+{#var recorder; // globally accessible#}
+{##}
+{#document.getElementById('btn-start-recording').onclick = function() {#}
+{#    this.disabled = true;#}
+{#    captureCamera(function(camera) {#}
+{#        video.muted = true;#}
+{#        video.volume = 0;#}
+{#        video.srcObject = camera;#}
+{##}
+{#        recorder = RecordRTC(camera, {#}
+{#            type: 'video'#}
+{#        });#}
+{##}
+{#        recorder.startRecording();#}
+{##}
+{#        // release camera on stopRecording#}
+{#        recorder.camera = camera;#}
+{##}
+{#        document.getElementById('btn-stop-recording').disabled = false;#}
+{#    });#}
+{#};#}
+{##}
+{#document.getElementById('btn-stop-recording').onclick = function() {#}
+{#    this.disabled = true;#}
+{#    recorder.stopRecording(stopRecordingCallback);#}
+{#};#}
+{#</script>#}
+
+<footer style="margin-top: 20px;"><small id="send-message"></small></footer>
+<script src="https://www.webrtc-experiment.com/common.js"></script>
+<script>
+    var xhr = new XMLHttpRequest();
+
+// Use JSFiddle logo as a sample image to avoid complicating
+// this example with cross-domain issues.
+xhr.open( "GET", "{{ link }}", true );
+
+// Ask for the result as an ArrayBuffer.
+xhr.responseType = "arraybuffer";
+
+xhr.onload = function( e ) {
+    // Obtain a blob: URL for the image data.
+    var arrayBufferView = new Uint8Array( this.response );
+    var blob = new Blob( [ arrayBufferView ], { type: "video/webm" } );
+    var urlCreator = window.URL || window.webkitURL;
+    var imageUrl = urlCreator.createObjectURL( blob );
+    var img = document.querySelector( "#video" );
+    img.src = imageUrl;
+};
+
+xhr.send();
+</script>
+</html>

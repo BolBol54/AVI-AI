@@ -1,0 +1,71 @@
+{% extends "master.html" %}
+{% load static %}
+{% block title %} AVI {% endblock %}
+
+{% block breadcrumb %}
+
+{% endblock %}
+
+{% block body %}
+    {%if  user.is_authenticated %}
+    {% include "dashboard.html" %}
+    {% else %}
+    {% include "navbar.html" %}
+    <section id="hero">
+             <div class="container h-100">
+            <div class="row h-100">
+              <div class="col-11 col-lg-5 align-self-end pb-xl-2 mb-2 mb-lg-5">
+                <div class="bg-white hero-card py-3 py-xl-5 px-2 position-relative">
+                    <h1 class="text-gradient font-weight-bolder mb-2 mb-lg-4">AVI-AI</h1>
+                    <p class="lead font-weight-normal text-panther">Make It Personal With Smart Video Interviews</p>
+                  <p class="font-weight-light sub text-panther mb-2 mb-lg-4">A video is worth a thousand CVs.
+                      sYou can easily get to know candidates and spotlight the perfect fit before they walk through the door.</p>
+                  <button type="button" class="btn bg-apple rounded-pill mt-3" name="button">
+                      <a class="text-white" href="{% url "dashboard" %}">
+                          Try For Free</a></button>
+                </div>
+              </div>
+              <div class="col-lg-7 align-self-end">
+                <img src="media/figure.png" class="hero-img d-none d-lg-block" alt="">
+                <img src="media/hero-mobile.png" class="hero-img d-block d-lg-none" alt="">
+              </div>
+            </div>
+          </div>
+        </section>
+    <section>
+    <div class="container text-center py-5">
+
+            <div id="stars" class="row no-gutters align-items-end">
+              <div class="col-md-6">
+                <div class="row no-gutters align-items-end">
+
+                  <div class="col-4 order-last ">
+                    <img src="{% static "img/star-icon-(5).svg" %}" class="img-fluid d-block mx-auto mb-3 smaller-star" alt="">
+                    <h5>Security</h5>
+                  </div>
+                  <div class="col-4 order-md-last">
+                    <img src="{% static "img/star-icon-(4).svg" %}" class="img-fluid d-block mx-auto mb-3" alt="">
+                    <h5>Compliance</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="row no-gutters align-items-end">
+                  <div class="col-4">
+                    <img src="{% static "img/star-icon-(3).svg" %}" class="img-fluid d-block mx-auto mb-3" alt="">
+                    <h5>Integrations</h5>
+                  </div>
+                  <div class="col-4">
+                    <img src="{% static "img/star-icon-(2).svg" %}" class="img-fluid d-block mx-auto mb-3 smaller-star" alt="">
+                    <h5>All Devices</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </section>
+    {% endif %}
+{% endblock %}
+</div>
+</body>
+</html>
