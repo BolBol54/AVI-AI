@@ -85,7 +85,7 @@ class Applicants(models.Model):
 
 class Report(models.Model):
     applicant= models.ForeignKey(Applicants,related_name="report",on_delete=models.CASCADE)
-    report = models.CharField(max_length=500,default="")
+    report = models.FileField(upload_to='videos/', null=True, verbose_name="")
 
 class CompanyUsers(models.Model):
     company = models.ForeignKey(Companies,related_name='companyUsers', on_delete=models.CASCADE)

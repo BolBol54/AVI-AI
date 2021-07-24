@@ -195,7 +195,7 @@
                                <td><div>
                                    <a class="btn btn-primary">Edit</a>
                                    <a class="btn btn-danger">Delete</a>
-                                   <a class="btn btn-info">View Report</a>
+                                   <a href="{% url "report" interviewee.id %}" class="btn btn-info">View Report</a>
                                </div></td>
                              </tr>
                             {% endfor %}

@@ -37,6 +37,7 @@
             <div class="d-inline-block">
                 <button class="btn btn-primary" id="play">Play</button>
                 <button class="btn btn-danger" id="pause">Pause</button>
+                <a id="download-video" download="test.webm">Download Video</a>
 
             </div>
 
@@ -68,9 +69,9 @@ function stopRecordingCallback() {
     video.src = video.srcObject = null;
     video.muted = false;
     video.volume = 1;
-    video.src = URL.createObjectURL(recorder.getBlob());
-
-
+    let blob = URL.createObjectURL(recorder.getBlob());
+    download_link.href = blob;
+    video.src = blob;
     recorder.camera.stop();
     recorder.destroy();
     recorder = null;
@@ -99,23 +100,14 @@ document.getElementById('play').onclick = function() {
     });
 };
 
-
-
 document.getElementById('pause').onclick = function() {
 
     this.disabled = true;
     document.getElementById("ans").value = video.src
-
-    {#var mediaSource = new MediaSource;#}
-    {#const url = URL.createObjectURL(mediaSource);#}
-    {#video.src = url;#}
     {#recordedBlob = recorder.blob; // blob property#}
     {##}
     {#    recorderBlob = recorder.getBlob(); // getBlob method#}
     {#    console.log(mediaSource)#}
-
-    download_link.href = recorder.getBlob();
-    window.download_link
 
     recorder.stopRecording(stopRecordingCallback);
 

@@ -26,9 +26,12 @@ urlpatterns = [
 
     #INTERVIWEE PART
     path('startinterview/<int:applicant_id>', views.onlineInterview, name="interviewee_interview"),
+    path('delete/<int:applicant_id>', views.deleteInterviewee, name="delete_interviewee"),
+
     path('view/', views.dynamic_stream, name="videostream"),
     path('upload', views.upload, name="video"),
-    path("record",views.record,name="recordvideo")
+    path("record",views.record,name="recordvideo"),
+    path("report/<int:interviewee_id>",views.report,name="report")
     # path(r'^/(?P<stream_path>(.*?))/$',views.dynamic_stream,name="videostream"),
     # path(r'^stream/$',views.indexscreen),
 

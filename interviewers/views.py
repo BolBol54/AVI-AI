@@ -1,28 +1,32 @@
 from datetime import datetime
 
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
 from .forms import JobForm, InterviewForm , QuestionForm , Interviewee
 from interviewers.models import Interviews, Job, Questions, Interviewees, Applicants, ApplicantQues
 import time
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail ,send_mass_mail
+from django.core.mail import send_mail, send_mass_mail, EmailMultiAlternatives
 from django.http import HttpResponse, StreamingHttpResponse, HttpResponseServerError, JsonResponse
 from django.conf import settings
 from django.views.decorators import gzip
 import cv2
 from django.views.decorators.csrf import csrf_exempt
-
+# Create your views here.
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.utils.datastructures import MultiValueDictKeyError
-import requests
-import os
-from django.conf import settings as django_settings
+from django.templatetags.static import static
 
-import base64
-import threading
 
-import threading
+def report(request,interviewee_id):
+    Int = Interviewees.objects.get(pk=interviewee_id)
+    str = Int.name.lower()
+    name = str.replace(" ", "")
+    html = "report/%s.html" %name
+    video = "/video/%s.mp4" %name
+    return  render(request,html,{"Interviewee":Int,"video":video})
 def record(request):
     return  render(request,"video.html")
 # Create your views here.
@@ -174,10 +178,17 @@ def questDelete(request,interview_id,question_id):
 
 
 def my_mail(request):
-    subject = "Greetings from Programink"
-    msg = "Learn Django at Programink.com"
+    subject = "Greetings from AVI"
+    html_content = render_to_string("mail.html",{"title":"Interview Invitation",})
+    text = strip_tags(html_content)
+
+    # html_message = 'Hey there' \
+    #                '<p>Your Interview Invitation for the vacancy</p>' \
+    #                '<a href="http://127.0.0.1:8000/login" class="btn btn-dark">Start Now</a>'
     to = request.POST["email"]
-    res = send_mail(subject, msg, settings.EMAIL_HOST_USER, [to])
+    res = EmailMultiAlternatives(subject, text, settings.EMAIL_HOST_USER, [to])
+    res.attach_alternative(html_content,"text/html")
+    res.send()
     if (res == 1):
         msg = "Mail Sent Successfully."
     else:
@@ -210,14 +221,14 @@ def interview(request,interview_id):
             name = request.POST['name']
             email =request.POST['email']
             send_by = request.user
-            # my_mail(request)
-            invitationLink = "/interview/" + str(interview_id) + "/interviewee/"
+            my_mail(request)
             app=Interviewees.objects.create(name=name, email=email,send_by=send_by,state="Waiting")
+            invitationLink = "startinterview/"+ str(app.id)
             app.applicant.create(
                 interview = interview,
                 invitationLink=invitationLink
             )
-            return redirect("interview")
+            return redirect("interview",interview_id)
 
 
     return render(request, "interview/interview.html", {"interview": interview,'questions': questions,
@@ -234,9 +245,8 @@ def onlineInterview(request,applicant_id):
             array = interview.interviewquestions_set.values_list('question_id')
             return render(request, "applicant/questions.html",{"question":questions[0],'interview':interview,})
         if "next" in request.POST:
-            # print(request.POST)
-            link = request.POST['answer']
-            print(link)
+            print(request.POST)
+
             # name = link.split("/")[3]
             # ApplicantQues.objects.create(
             #     applicant= Applicant,
@@ -250,7 +260,7 @@ def onlineInterview(request,applicant_id):
                 # file = open(os.path.join(django_settings.STATIC_ROOT, f'video_{link}.json'), 'w')
                 # print(file)
 
-            return render(request,"video.html",{"link":link})
+            return render(request,"video.html")
 
             questions.pop(0)
             last = ""
@@ -277,6 +287,12 @@ def upload(request):
     #
     #     ApplicantQues.objects.create(
     #     )
+
+def deleteInterviewee(request,interviewee_id):
+
+    int = Interviewees.objects.get(pk=interviewee_id)
+    app = int.applicant.all()
+
 
 
 
